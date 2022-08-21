@@ -1,0 +1,50 @@
+---
+import { FaArrowRight, FaBook, FaGlasses } from "react-icons/fa";
+import moment from "moment";
+
+const {category, date, title, description, author} = Astro.props.post.frontmatter
+const {url} = Astro.props.post
+---
+
+<article class="p-6 bg-white rounded-lg border border-gray-200 shadow-md dark:bg-gray-800 dark:border-gray-700">
+									<div class="flex justify-between items-center mb-5 text-gray-500">
+										<span class="bg-navy-100 text-navy-800 text-xs font-medium inline-flex items-center px-2.5 py-0.5 rounded dark:bg-navy-200 dark:text-navy-800">
+											{category === 'guide' && (
+												<>
+												<FaBook size={14} className="mr-1 w-3 h-3" />
+												<span>Guide</span>
+												</>
+											)}
+											{category === 'case-studies' && (
+												<>
+												<FaGlasses size={14} className="mr-1 w-3 h-3" />
+												<span>Case study</span>
+												</>
+												)}
+										</span>
+										<time class="text-sm">{moment(date).fromNow()}</time>
+									</div>
+									<h2 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+										<a href={url}>{title}</a>
+									</h2>
+									<p class="mb-5 font-light text-gray-500 dark:text-gray-400">
+										{description}
+									</p>
+									<div class="flex justify-between items-center">
+										<div class="flex items-center space-x-4">
+											<img
+												class="w-7 h-7 rounded-full"
+												src="/author_daniel.jpg"
+												alt={`${author}'s avatar`}
+											/>
+											<span class="font-medium dark:text-white"> {author}</span>
+										</div>
+										<a
+											href={url}
+											class="inline-flex items-center font-medium text-navy-600 dark:text-navy-500 hover:underline"
+										>
+											Read more
+											<FaArrowRight className='ml-2 w-4 h-4' />
+										</a>
+									</div>
+								</article>

@@ -1,9 +1,9 @@
 ---
 export interface Props {
-	title: string;
+	frontmatter: {
+		title: string;
+	};
 }
-
-const { title } = Astro.props as Props;
 
 import * as Sentry from "@sentry/browser";
 import { BrowserTracing } from "@sentry/tracing";
@@ -15,7 +15,9 @@ Sentry.init({
 	tracesSampleRate: 1.0,
 	release: `3p-web@0.0.1`,
 });
-const { frontmatter } = Astro.props;
+const { title, date, author } = Astro.props.frontmatter;
+import moment from "moment";
+import { FaTwitter } from "react-icons/fa";
 ---
 
 <!DOCTYPE html>
@@ -31,11 +33,32 @@ const { frontmatter } = Astro.props;
 			rel="stylesheet"
 		/>
 		<meta name="generator" content={Astro.generator} />
-		<title>{title || frontmatter.title}</title>
+		<title>{title}</title>
 	</head>
 	<body>
 		<Navbar client:visible />
-		<slot />
+		<main class="max-w-screen-xl mx-auto my-3">
+			<h1 class="text-3xl font-bold font-exo inline-flex items-center gap-2">
+				{title}
+				<span class="opacity-50 text-sm inline-flex gap-1 items-end font-lato">
+					<span> by</span>
+					<a
+						href="https://twitter.com/dannydchef"
+						target="_blank"
+						class="inline-flex items-center gap-1 hover:text-cyan-600"
+					>
+						<span class="text-black underline">
+							{author}
+						</span>
+						<FaTwitter size={16} className="block transition-all" />
+					</a>
+				</span>
+			</h1>
+			<slot class="content" />
+			<p class="text-sm opacity-75">
+				Written on: {moment(date).format("MM/DD/YYYY")}
+			</p>
+		</main>
 		<style>
 			:root {
 				--font-size-base: clamp(1rem, 0.34vw + 0.91rem, 1.19rem);
@@ -57,6 +80,12 @@ const { frontmatter } = Astro.props;
 			:global(code) {
 				font-family: Menlo, Monaco, Lucida Console, Liberation Mono,
 					DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace;
+			}
+
+			.content h2 {
+				font-size: var(--font-size-xl);
+				line-height: 2rem;
+				color: purple;
 			}
 		</style>
 	</body>
